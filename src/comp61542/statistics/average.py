@@ -32,4 +32,17 @@ def mode(X):
         if d[key] > m[1]:
             m = (key, d[key])
 
-    return [m[0]]
+    count = 0
+    for key in d.keys():
+        if d[key] == m[1]:
+            count += 1
+
+    matr = [0 for i in range(count)]
+    x = 0;
+    for key in d.keys():
+        if d[key] == m[1]:
+            matr[x] = key
+            x += 1
+    
+
+    return matr
