@@ -208,7 +208,6 @@ class Database:
             for i in range(len(astats)) ]
         return (header, data)
 
-
     def get_publications_by_author(self):
         header = ("Author", "Number of conference papers",
             "Number of journals", "Number of books",
@@ -362,6 +361,155 @@ class Database:
                     links.add((a, a2))
         return (nodes, links)
 
+    def get_author_publication_number(self, authorname):
+        headers = "Number of Publications"
+        
+        data = {}
+        data[self.author_idx[authorname]] = 0
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                try:
+                    data[self.author_idx[authorname]] += 1
+                except KeyError:
+                    data[self.author_idx[authorname]] = 1
+        
+        return (headers, data[self.author_idx[authorname]])
+        
+    def get_author_conference_number(self, authorname):
+        headers = "Number of Conferences"
+        
+        data = {}
+        data[self.author_idx[authorname]] = 0
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if p.pub_type == 0:
+                    try:
+                        data[self.author_idx[authorname]] += 1
+                    except KeyError:
+                        data[self.author_idx[authorname]] = 1
+        
+        return (headers, data[self.author_idx[authorname]])
+    
+    def get_author_journal_number(self, authorname):
+        headers = "Number of Conferences"
+        
+        data = {}
+        data[self.author_idx[authorname]] = 0
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if p.pub_type == 1:
+                    try:
+                        data[self.author_idx[authorname]] += 1
+                    except KeyError:
+                        data[self.author_idx[authorname]] = 1
+        
+        return (headers, data[self.author_idx[authorname]])
+       
+    def get_author_bookchapter_number(self, authorname):
+        headers = "Number of Conferences"
+        
+        data = {}
+        data[self.author_idx[authorname]] = 0
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if p.pub_type == 3:
+                    try:
+                        data[self.author_idx[authorname]] += 1
+                    except KeyError:
+                        data[self.author_idx[authorname]] = 1
+        
+        return (headers, data[self.author_idx[authorname]])
+    
+    def get_author_book_number(self, authorname):
+        headers = "Number of Conferences"
+        
+        data = {}
+        data[self.author_idx[authorname]] = 0
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if p.pub_type == 2:
+                    try:
+                        data[self.author_idx[authorname]] += 1
+                    except KeyError:
+                        data[self.author_idx[authorname]] = 1
+        
+        return (headers, data[self.author_idx[authorname]])
+    
+    def get_author_coauthor_number(self, authorname):
+        headers = "Number of times co-author"
+        
+        data = {}
+        data[self.author_idx[authorname]] = 0
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if len(p.authors) != 1 and p.authors[0] != self.author_idx[authorname] and p.authors[len(p.authors) -1] != self.author_idx[authorname]:
+                        try: 
+                            data[self.author_idx[authorname]] += 1
+                        except KeyError:
+                            data[self.author_idx[authorname]] = 1
+#
+# This may need putting back in if we are to count second author entries as first
+#
+#                if p.authors[len(p.authors) - 1] != self.author_idx[authorname]:
+#                    try: 
+#                        data[self.author_idx[authorname]] += 1
+#                    except KeyError:
+#                        data[self.author_idx[authorname]] = 1
+                
+        return (headers, data[self.author_idx[authorname]])
+    
+    def get_author_first_on_paper_number(self, authorname):
+        headers = "Number of time First author"
+        
+        data = {}
+        data[self.author_idx[authorname]] = 0
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if len(p.authors) == 1:
+                    try: 
+                        data[self.author_idx[authorname]] += 1
+                    except KeyError:
+                        data[self.author_idx[authorname]] = 1
+                if p.authors[0] == self.author_idx[authorname]:
+                    try: 
+                        data[self.author_idx[authorname]] += 1
+                    except KeyError:
+                        data[self.author_idx[authorname]] = 1
+#
+# This may need putting back in if we are to count second author entries as first
+#
+#                if p.authors[len(p.authors) - 1] != self.author_idx[authorname]:
+#                    try: 
+#                        data[self.author_idx[authorname]] += 1
+#                    except KeyError:
+#                        data[self.author_idx[authorname]] = 1
+                
+        return (headers, data[self.author_idx[authorname]])
+    
+    def get_author_last_on_paper_number(self, authorname):
+        headers = "Number of time First author"
+        
+        data = {}
+        data[self.author_idx[authorname]] = 0
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if len(p.authors) != 1:
+                    if p.authors[len(p.authors) - 1] == self.author_idx[authorname]:
+                        try: 
+                            data[self.author_idx[authorname]] += 1
+                        except KeyError:
+                            data[self.author_idx[authorname]] = 1
+                            
+        return (headers, data[self.author_idx[authorname]])
+    
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = [ "sub", "sup", "i", "tt", "ref" ]
     PUB_TYPE = {

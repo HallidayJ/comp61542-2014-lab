@@ -23,7 +23,6 @@ class TestSearch(unittest.TestCase):
         _, number = db.get_author_conference_number(author)
         self.assertEqual(number, 8)
     
-    
     def test_get_author_journal_number(self):
         author = "Caroline Jay"
         db = database.Database()

@@ -117,3 +117,4 @@ def showPublicationSummary(status):
         args["data"] = db.get_author_totals_by_year()
 
     return render_template('statistics_details.html', args=args)
+
