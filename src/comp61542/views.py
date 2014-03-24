@@ -127,6 +127,7 @@ def showPublicationSummary(status):
         args["title"] = "Publication by Year"
         
         sort = sorter.Sorter()
+        data = db.get_publications_by_year()
         sortedData = sort.sort_asc(data[1], index )
         args["data"] = (data[0],sortedData)
         
@@ -136,10 +137,11 @@ def showPublicationSummary(status):
         args["title"] = "Author by Year"
         
         sort = sorter.Sorter()
+        data = db.get_author_totals_by_year()            
         sortedData = sort.sort_asc(data[1], index )
         args["data"] = (data[0],sortedData)
         
-        args["data"] = db.get_author_totals_by_year()
+#         args["data"] = db.get_author_totals_by_year()
 
     return render_template('statistics_details.html', args=args)
 
