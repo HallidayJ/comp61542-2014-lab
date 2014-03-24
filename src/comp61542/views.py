@@ -127,9 +127,9 @@ def showSearch():
     
     author=""
     if "author" in request.args:
-        author = int(request.args.get("author"))
+        author = request.args.get("author")
         
-    #args["data"] = db.get_author_details(author)
+    args["data"] = db.get_author_details(author)
     args["author"] = author
     
     return render_template('search.html', args=args)
