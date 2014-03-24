@@ -362,7 +362,7 @@ class Database:
         return (nodes, links)
 
     def get_author_publication_number(self, authorname):
-        headers = "Number of Publications"
+        headers = "Publications"
         
         data = {}
         data[self.author_idx[authorname]] = 0
@@ -377,7 +377,7 @@ class Database:
         return (headers, data[self.author_idx[authorname]])
         
     def get_author_conference_number(self, authorname):
-        headers = "Number of Conferences"
+        headers = "Conference Papers"
         
         data = {}
         data[self.author_idx[authorname]] = 0
@@ -393,7 +393,7 @@ class Database:
         return (headers, data[self.author_idx[authorname]])
     
     def get_author_journal_number(self, authorname):
-        headers = "Number of Conferences"
+        headers = "Journals"
         
         data = {}
         data[self.author_idx[authorname]] = 0
@@ -409,7 +409,7 @@ class Database:
         return (headers, data[self.author_idx[authorname]])
        
     def get_author_bookchapter_number(self, authorname):
-        headers = "Number of Conferences"
+        headers = "Book Chapters"
         
         data = {}
         data[self.author_idx[authorname]] = 0
@@ -425,7 +425,7 @@ class Database:
         return (headers, data[self.author_idx[authorname]])
     
     def get_author_book_number(self, authorname):
-        headers = "Number of Conferences"
+        headers = "Books"
         
         data = {}
         data[self.author_idx[authorname]] = 0
@@ -441,7 +441,7 @@ class Database:
         return (headers, data[self.author_idx[authorname]])
     
     def get_author_coauthor_number(self, authorname):
-        headers = "Number of co-authors"
+        headers = "Co-authors"
         
         data = {}
         data = self.get_coauthor_details(authorname)
@@ -455,7 +455,7 @@ class Database:
     
     
     def get_author_first_on_paper_number(self, authorname):
-        headers = "Number of time First author"
+        headers = "First on paper"
         
         data = {}
         data[self.author_idx[authorname]] = 0
@@ -484,7 +484,7 @@ class Database:
         return (headers, data[self.author_idx[authorname]])
     
     def get_author_last_on_paper_number(self, authorname):
-        headers = "Number of time First author"
+        headers = "Last on Paper"
         
         data = {}
         data[self.author_idx[authorname]] = 0
@@ -501,8 +501,40 @@ class Database:
         return (headers, data[self.author_idx[authorname]])
     
     def get_author_details(self, authorname):
+        if authorname == "":
+            return ([],[])
         
-        return (NULL,NULL)
+        names = []
+        count = 0
+        for au in self.get_all_authors():
+            if authorname.lower() in au.lower():
+                count += 1
+                names.append(au)
+                
+                
+        if count == 0:
+            return ([],[])
+        
+        data = []       
+        for authorn in names:
+            da = []
+            da.append(self.get_author_publication_number(authorn))
+            da.append(self.get_author_conference_number(authorn))
+            da.append(self.get_author_journal_number(authorn))
+            da.append(self.get_author_bookchapter_number(authorn))
+            da.append(self.get_author_book_number(authorn))
+            da.append(self.get_author_coauthor_number(authorn))
+            da.append(self.get_author_first_on_paper_number(authorn))
+            da.append(self.get_author_last_on_paper_number(authorn))
+                    
+            data.append([authorn, da[0][1],da[1][1], da[2][1], da[3][1], da[4][1], da[5][1], da[6][1], da[7][1] ])
+        
+        
+        header = ("Name", da[0][0],da[1][0], da[2][0], da[3][0], da[4][0], da[5][0], da[6][0], da[7][0])
+
+
+        
+        return (header,data)
         
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = [ "sub", "sup", "i", "tt", "ref" ]

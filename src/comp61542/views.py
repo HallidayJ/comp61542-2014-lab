@@ -149,5 +149,12 @@ def showSearch():
     db = app.config['DATABASE']
     args = {"dataset":dataset, "id":"search"}
     args["title"] = "Search"
-
+    
+    author=""
+    if "author" in request.args:
+        author = request.args.get("author")
+        
+    args["data"] = db.get_author_details(author)
+    args["author"] = author
+    
     return render_template('search.html', args=args)
