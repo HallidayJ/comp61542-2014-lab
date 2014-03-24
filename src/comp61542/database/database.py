@@ -440,7 +440,7 @@ class Database:
         
         return (headers, data[self.author_idx[authorname]])
     
-    def get_author_coauthor_number(self, authorname):
+    def get_author_coauthoring_number(self, authorname):
         headers = "Number of times co-author"
         
         data = {}
@@ -463,6 +463,19 @@ class Database:
 #                        data[self.author_idx[authorname]] = 1
                 
         return (headers, data[self.author_idx[authorname]])
+    
+    def get_author_coauthor_number(self, authorname):
+        headers = "Number of co-authors"
+        
+        data = {}
+        data = self.get_coauthor_details(authorname)
+        
+        count = 0
+        for author in data:
+            count += 1
+            
+        return count
+    
     
     def get_author_first_on_paper_number(self, authorname):
         headers = "Number of time First author"
