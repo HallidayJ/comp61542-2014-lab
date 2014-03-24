@@ -1,4 +1,4 @@
-from comp61542 import app
+from comp61542 import app, sorter
 from database import database
 from flask import (render_template, request)
 
@@ -96,6 +96,15 @@ def showStatisticsMenu():
 
 @app.route("/statisticsdetails/<status>")
 def showPublicationSummary(status):
+#     print status
+    
+    strings = status.split("+")
+    status = strings[0]
+    index = int(strings[1])
+    
+#     print status
+#     print index
+
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
     args = {"dataset":dataset, "id":status}
@@ -106,14 +115,30 @@ def showPublicationSummary(status):
 
     if (status == "publication_author"):
         args["title"] = "Author Publication"
-        args["data"] = db.get_publications_by_author()
+        data = db.get_publications_by_author()
+        
+        sort = sorter.Sorter()
+        sortedData = sort.sort_asc(data[1], index )
+        args["data"] = (data[0],sortedData)
+        
+#         args["data"] = data
 
     if (status == "publication_year"):
         args["title"] = "Publication by Year"
-        args["data"] = db.get_publications_by_year()
+        
+        sort = sorter.Sorter()
+        sortedData = sort.sort_asc(data[1], index )
+        args["data"] = (data[0],sortedData)
+        
+#         args["data"] = db.get_publications_by_year()
 
     if (status == "author_year"):
         args["title"] = "Author by Year"
+        
+        sort = sorter.Sorter()
+        sortedData = sort.sort_asc(data[1], index )
+        args["data"] = (data[0],sortedData)
+        
         args["data"] = db.get_author_totals_by_year()
 
     return render_template('statistics_details.html', args=args)

@@ -8,12 +8,12 @@
   <thead>
     <tr>
     {% for column in args.data[0] %}
-      <th>{{ column }}</th>
+      <th><a href="{{ args.id }}+{{ loop.index0 }}">{{ column }}</a></th>
     {% endfor %}
     </tr>
   </thead>
 
-  <tbody>
+  <tbody> 	
   {% for row in args.data[1] %}
     <tr>
     {% for data_item in row %}
