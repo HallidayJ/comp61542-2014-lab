@@ -101,6 +101,12 @@ def showPublicationSummary(status):
     strings = status.split("+")
     status = strings[0]
     index = int(strings[1])
+    sortBool  = strings[2]
+    
+    if sortBool == "false":
+        isDesc = False
+    elif sortBool == "true":
+        isDesc = True
     
 #     print status
 #     print index
@@ -111,38 +117,34 @@ def showPublicationSummary(status):
 
     if (status == "publication_summary"):
         args["title"] = "Publication Summary"
-        args["data"] = db.get_publication_summary()
+        data = db.get_publication_summary()
+#         args["data"] = db.get_publication_summary()
 
     if (status == "publication_author"):
         args["title"] = "Author Publication"
-        data = db.get_publications_by_author()
-        
-        sort = sorter.Sorter()
-        sortedData = sort.sort_asc(data[1], index )
-        args["data"] = (data[0],sortedData)
-        
+        data = db.get_publications_by_author()     
 #         args["data"] = data
 
     if (status == "publication_year"):
         args["title"] = "Publication by Year"
-        
-        sort = sorter.Sorter()
-        data = db.get_publications_by_year()
-        sortedData = sort.sort_asc(data[1], index )
-        args["data"] = (data[0],sortedData)
-        
-#         args["data"] = db.get_publications_by_year()
 
     if (status == "author_year"):
         args["title"] = "Author by Year"
         
         sort = sorter.Sorter()
-        data = db.get_author_totals_by_year()            
-        sortedData = sort.sort_asc(data[1], index )
-        args["data"] = (data[0],sortedData)
+        data = db.get_author_totals_by_year()   
         
 #         args["data"] = db.get_author_totals_by_year()
 
+    sort = sorter.Sorter()
+    if isDesc:
+        sortedData = sort.sort_desc(data[1], index )
+    else:
+        sortedData = sort.sort_asc(data[1], index )
+    args["data"] = (data[0],sortedData)
+        
+    args["sort_index"] = index
+    
     return render_template('statistics_details.html', args=args)
 
 @app.route("/search")
