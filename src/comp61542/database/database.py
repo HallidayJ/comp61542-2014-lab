@@ -440,30 +440,6 @@ class Database:
         
         return (headers, data[self.author_idx[authorname]])
     
-    def get_author_coauthoring_number(self, authorname):
-        headers = "Number of times co-author"
-        
-        data = {}
-        data[self.author_idx[authorname]] = 0
-        
-        for p in self.publications:
-            if self.author_idx[authorname] in p.authors:
-                if len(p.authors) != 1 and p.authors[0] != self.author_idx[authorname] and p.authors[len(p.authors) -1] != self.author_idx[authorname]:
-                        try: 
-                            data[self.author_idx[authorname]] += 1
-                        except KeyError:
-                            data[self.author_idx[authorname]] = 1
-#
-# This may need putting back in if we are to count second author entries as first
-#
-#                if p.authors[len(p.authors) - 1] != self.author_idx[authorname]:
-#                    try: 
-#                        data[self.author_idx[authorname]] += 1
-#                    except KeyError:
-#                        data[self.author_idx[authorname]] = 1
-                
-        return (headers, data[self.author_idx[authorname]])
-    
     def get_author_coauthor_number(self, authorname):
         headers = "Number of co-authors"
         
