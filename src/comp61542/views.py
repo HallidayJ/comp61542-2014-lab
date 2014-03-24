@@ -118,3 +118,10 @@ def showPublicationSummary(status):
 
     return render_template('statistics_details.html', args=args)
 
+@app.route("/search")
+def showSearch():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset, "id":"search"}
+    args["title"] = "Search"
+    return render_template('search.html', args=args)
