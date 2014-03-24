@@ -451,7 +451,7 @@ class Database:
             if author[0] != authorname:
                 count += 1
             
-        return count
+        return (headers, count)
     
     
     def get_author_first_on_paper_number(self, authorname):
@@ -500,6 +500,10 @@ class Database:
                             
         return (headers, data[self.author_idx[authorname]])
     
+    def get_author_details(self, authorname):
+        
+        return (NULL,NULL)
+        
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = [ "sub", "sup", "i", "tt", "ref" ]
     PUB_TYPE = {

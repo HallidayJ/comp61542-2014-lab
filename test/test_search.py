@@ -48,7 +48,7 @@ class TestSearch(unittest.TestCase):
         author = "Caroline Jay"
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
-        number = db.get_author_coauthor_number(author)
+        _, number = db.get_author_coauthor_number(author)
         self.assertEqual(number, 20)
     
     def test_get_author_first_on_paper_number(self):

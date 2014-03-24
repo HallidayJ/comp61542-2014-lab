@@ -124,4 +124,5 @@ def showSearch():
     db = app.config['DATABASE']
     args = {"dataset":dataset, "id":"search"}
     args["title"] = "Search"
+
     return render_template('search.html', args=args)
