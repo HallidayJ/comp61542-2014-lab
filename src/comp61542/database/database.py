@@ -472,7 +472,8 @@ class Database:
         
         count = 0
         for author in data:
-            count += 1
+            if author[0] != authorname:
+                count += 1
             
         return count
     
