@@ -9,7 +9,11 @@
     <tr>
     {% for column in args.data[0] %}
     	{% if args.sort_index == loop.index0 %}
-      		<th><a href="{{ args.id }}+{{ loop.index0 }}+true">{{ column }}</a></th>
+    		{% if args.sortBool %}
+      			<th><a href="{{ args.id }}+{{ loop.index0 }}+false">{{ column }}</a></th>
+      		{% else %}
+      			<th><a href="{{ args.id }}+{{ loop.index0 }}+true">{{ column }}</a></th>
+      		{%endif %}
       	{% else %}
       		<th><a href="{{ args.id }}+{{ loop.index0 }}+false">{{ column }}</a></th>
        {%endif %}
