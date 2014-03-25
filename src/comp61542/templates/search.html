@@ -8,7 +8,11 @@ Author Name: <input type="text" name="author" value="{{ args.author }}">
 <input type="submit" value="Submit">
 </form>
 
-<h1>Search Results for "{{ args.author }}"</h1>
+{% if args.author == "" %}
+	<p>Enter a name above to search the database</p>
+{% else %}
+	<h1>Search Results for "{{ args.author }}"</h1>
+{% endif %}
 
 <table>
   <thead>
