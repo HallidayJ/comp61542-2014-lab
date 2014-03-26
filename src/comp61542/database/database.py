@@ -375,6 +375,18 @@ class Database:
                     data[self.author_idx[authorname]] = 1
         
         return (headers, data[self.author_idx[authorname]])
+    
+    def get_author_publications(self, authorname):
+        headers = ("Conference Papers", "Journals", "Books", "Book Chapters", "Overall")
+        
+        data = [0,0,0,0,0]
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                data[4] += 1
+                data[p.pub_type] += 1
+
+        return (headers, [data])
         
     def get_author_conference_number(self, authorname):
         headers = "Conference Papers"
@@ -479,6 +491,20 @@ class Database:
                 
         return (headers, data[self.author_idx[authorname]])
     
+    def get_author_first_place(self, authorname):
+        headers = ("Conference Papers", "Journals", "Books", "Book Chapters", "Overall")
+        
+        data = [0,0,0,0,0]
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if len(p.authors) != 1:
+                    if p.authors[0] == self.author_idx[authorname]:
+                        data[4] += 1
+                        data[p.pub_type] += 1
+
+        return (headers, [data])    
+    
     def get_author_last_on_paper_number(self, authorname):
         headers = "Last on Paper"
         
@@ -496,7 +522,21 @@ class Database:
                             
         return (headers, data[self.author_idx[authorname]])
     
-    def get_author_sole_on_paper(self, authorname):
+    def get_author_last_place(self, authorname):
+        headers = ("Conference Papers", "Journals", "Books", "Book Chapters", "Overall")
+        
+        data = [0,0,0,0,0]
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if len(p.authors) != 1:
+                    if p.authors[len(p.authors) - 1] == self.author_idx[authorname]:
+                        data[4] += 1
+                        data[p.pub_type] += 1
+
+        return (headers, [data])  
+    
+    def get_author_sole_on_paper_number(self, authorname):
         headers = "Sole Author"
         
         data = {}
@@ -511,6 +551,19 @@ class Database:
                         data[self.author_idx[authorname]] = 1
                         
         return (headers, data[self.author_idx[authorname]])
+    
+    def get_author_sole_place(self, authorname):
+        headers = ("Conference Papers", "Journals", "Books", "Book Chapters", "Overall")
+        
+        data = [0,0,0,0,0]
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if len(p.authors) == 1:
+                    data[4] += 1
+                    data[p.pub_type] += 1
+
+        return (headers, [data])  
     
     def get_author_details(self, authorname):
         if authorname == "":
@@ -538,7 +591,7 @@ class Database:
             da.append(self.get_author_coauthor_number(authorn))
             da.append(self.get_author_first_on_paper_number(authorn))
             da.append(self.get_author_last_on_paper_number(authorn))
-            da.append(self.get_author_sole_on_paper(authorn)) 
+            da.append(self.get_author_sole_on_paper_number(authorn)) 
                     
             data.append([authorn, da[0][1],da[1][1], da[2][1], da[3][1], da[4][1], da[5][1], da[6][1], da[7][1], da[8][1] ])
         
