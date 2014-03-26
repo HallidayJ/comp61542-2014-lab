@@ -538,13 +538,11 @@ class Database:
             da.append(self.get_author_coauthor_number(authorn))
             da.append(self.get_author_first_on_paper_number(authorn))
             da.append(self.get_author_last_on_paper_number(authorn))
-            da.append(self.get_author_sole_on_paper(authorname))
                     
-            data.append([authorn, da[0][1],da[1][1], da[2][1], da[3][1], da[4][1], da[5][1], da[6][1], da[7][1], da[8][1] ])
+            data.append([authorn, da[0][1],da[1][1], da[2][1], da[3][1], da[4][1], da[5][1], da[6][1], da[7][1] ])
         
+        header = ("Name", da[0][0],da[1][0], da[2][0], da[3][0], da[4][0], da[5][0], da[6][0], da[7][0])
         
-        header = ("Name", da[0][0],da[1][0], da[2][0], da[3][0], da[4][0], da[5][0], da[6][0], da[7][0], da[8][0])
-
         return (header,data)
         
 class DocumentHandler(handler.ContentHandler):
