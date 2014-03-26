@@ -132,15 +132,16 @@ def showPublicationSummary(status):
     if (status == "author_year"):
         args["title"] = "Author by Year"
         
+        sort = sorter.Sorter()
         data = db.get_author_totals_by_year()   
         
 #         args["data"] = db.get_author_totals_by_year()
 
     sort = sorter.Sorter()
     if isDesc:
-        sortedData = sort.sort_desc(data[1], index)
+        sortedData = sort.sort_desc(data[1], index )
     else:
-        sortedData = sort.sort_asc(data[1], index)
+        sortedData = sort.sort_asc(data[1], index )
     args["data"] = (data[0],sortedData)
         
     args["sort_index"] = index
@@ -172,9 +173,9 @@ def showSearch(status):
     
     sort = sorter.Sorter()
     if isDesc:
-        sortedData = sort.sort_desc(db.get_author_details(author)[1], index)
+        sortedData = sort.sort_desc(db.get_author_details(author)[1], index )
     else:
-        sortedData = sort.sort_asc(db.get_author_details(author)[1], index)
+        sortedData = sort.sort_asc(db.get_author_details(author)[1], index )
     args["data"] = (db.get_author_details(author)[0],sortedData)
         
     args["sort_index"] = index
