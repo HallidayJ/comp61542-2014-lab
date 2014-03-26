@@ -65,5 +65,12 @@ class TestSearch(unittest.TestCase):
         _, number = db.get_author_last_on_paper_number(author)
         self.assertEqual(number, 1)
     
+    def test_get_author_sole_on_paper(self):
+        author = "Stefano Ceri"
+        db = database.Database()
+        self.assetTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        _, number = db.get_author_sole_on_paper(author)
+        self.assertEqual(number, 8)
+    
 if __name__ == '__main__':
     unittest.main()

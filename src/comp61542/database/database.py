@@ -462,16 +462,12 @@ class Database:
         
         for p in self.publications:
             if self.author_idx[authorname] in p.authors:
-                if len(p.authors) == 1:
-                    try: 
-                        data[self.author_idx[authorname]] += 1
-                    except KeyError:
-                        data[self.author_idx[authorname]] = 1
-                if p.authors[0] == self.author_idx[authorname]:
-                    try: 
-                        data[self.author_idx[authorname]] += 1
-                    except KeyError:
-                        data[self.author_idx[authorname]] = 1
+                if len(p.authors) != 1:
+                    if p.authors[0] == self.author_idx[authorname]:
+                        try: 
+                            data[self.author_idx[authorname]] += 1
+                        except KeyError:
+                            data[self.author_idx[authorname]] = 1
 #
 # This may need putting back in if we are to count second author entries as first
 #
@@ -498,6 +494,22 @@ class Database:
                         except KeyError:
                             data[self.author_idx[authorname]] = 1
                             
+        return (headers, data[self.author_idx[authorname]])
+    
+    def get_author_sole_on_paper(self, authorname):
+        headers = "Sole Author"
+        
+        data = {}
+        data[self.author_idx[authorname]] = 0
+        
+        for p in self.publications:
+            if self.author_idx[authorname] in p.authors:
+                if len(p.authors) == 1:
+                    try: 
+                        data[self.author_idx[authorname]] += 1
+                    except KeyError:
+                        data[self.author_idx[authorname]] = 1
+                        
         return (headers, data[self.author_idx[authorname]])
     
     def get_author_details(self, authorname):
