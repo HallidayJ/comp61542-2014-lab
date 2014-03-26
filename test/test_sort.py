@@ -111,7 +111,6 @@ class TestSearch(unittest.TestCase):
         sortedData = sort.sort_desc(data,2)
         self.assertEqual(sortedData, [ ('Author3', 5, 6, 7, 8, 26), ('Author2', 6, 4, 6, 9, 30), ('Author1', 1, 2, 3, 4, 10) ])
         self.assertNotEqual(sortedData, None)
-    
-    
+        
 if __name__ == '__main__':
     unittest.main()
