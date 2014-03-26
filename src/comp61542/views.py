@@ -180,8 +180,54 @@ def showSearch(status):
         
     args["sort_index"] = index
     args["sortBool"] = isDesc
-        
-    #args["data"] = db.get_author_details(author)
     args["author"] = author
     
     return render_template('search.html', args=args)
+
+@app.route("/show_author")
+def showAuthor():
+    
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset, "id":"show_author"}
+
+    author = "xesto"
+    if "author" in request.args:
+        author = request.args.get("author")
+    args["title"] = "Author Details for " + author
+    
+    args["data"] = (db.get_author_publications(author))
+        
+    args["author"] = author
+    
+    
+    tables = []
+    headers = ["Conference Paper", "Journal", "Book", "Book Chapter", "All Publications"]
+    tables.append({
+        "id":1,
+        "title":"Number of Publications",
+        "header":headers,
+        "rows":db.get_author_publications(author)[1]})
+    tables.append({
+        "id":2,
+        "title":"Number of times First Author",
+        "header":headers,
+        "rows":db.get_author_first_place(author)[1]})
+    tables.append({
+        "id":3,
+        "title":"Number of times Last Author",
+        "header":headers,
+        "rows":db.get_author_last_place(author)[1]})
+    tables.append({
+        "id":4,
+        "title":"Number of times Sole Author",
+        "header":headers,
+        "rows":db.get_author_sole_place(author)[1]})
+
+
+    args['tables'] = tables
+    
+    
+    
+    
+    return render_template('show_author.html', args=args)

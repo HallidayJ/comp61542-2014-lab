@@ -26,7 +26,7 @@ Author Name: <input type="text" name="author" value="{{ args.author }}">
 	    	{%endif %}
 	    {% else %}
 	      		<th style="padding: 5px; text-align:center;" ><a href="{{ args.id }}+{{ loop.index0 }}+false?author={{ args.author}}">{{ column }}</a></th>
-	    {%endif %}
+	    {% endif %}
     {% endfor %}
     </tr>
   </thead>
@@ -34,7 +34,11 @@ Author Name: <input type="text" name="author" value="{{ args.author }}">
   {% for row in args.data[1] %}
     <tr>
     {% for data_item in row %}
-      <td style="padding: 5px; text-align:center;">{{ data_item }}</td>
+	    {% if loop.index == 1 %}
+	    	<td style="padding: 5px; text-align:center;"><a href="/show_author?author={{ data_item|replace(" ","+",5) }}">{{ data_item }}</a></td>
+	    {% else %}
+	      <td style="padding: 5px; text-align:center;">{{ data_item }}</td>
+	    {% endif %}
     {% endfor %}
     </tr>
   {% endfor %}
