@@ -138,7 +138,5 @@ class TestSearch(unittest.TestCase):
         sortedData = sort.sort_asc(data,1)
         self.assertEqual(sortedData, [('Maria Charalambous', 5), ('Andreas Vlachou', 5), ('Savvas Vlachou', 5), ('Oscar Wild', 6), ('Constantina Athanasiadou', 8)])
    
-        
-         
 if __name__ == '__main__':
     unittest.main()
