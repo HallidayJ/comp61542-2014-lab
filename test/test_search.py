@@ -65,12 +65,48 @@ class TestSearch(unittest.TestCase):
         _, number = db.get_author_last_on_paper_number(author)
         self.assertEqual(number, 1)
     
-    def test_get_author_sole_on_paper(self):
+    def test_get_author_sole_on_paper_number(self):
         author = "Stefano Ceri"
         db = database.Database()
-        self.assetTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
-        _, number = db.get_author_sole_on_paper(author)
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        _, number = db.get_author_sole_on_paper_number(author)
         self.assertEqual(number, 8)
+        
+    def test_search_by_name_part(self):
+        authorpart = "Car"
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        _, data = db.get_author_details(authorpart)
+        self.assertEqual(len(data), 23)
     
+    def test_count_get_author_by_publication(self):
+        author = "Caroline Jay"
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        _, data = db.get_author_publications(author)
+        self.assertEqual(data, [[8, 9, 0, 1, 18]])
+
+    def test_count_get_author_first_place_by_publication(self):
+        author = "Caroline Jay"
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        _, data = db.get_author_first_place(author)
+        self.assertEqual(data, [[2, 4, 0, 1, 7]])
+  
+    def test_count_get_author_last_place_by_publication(self):
+        author = "Caroline Jay"
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        _, data = db.get_author_last_place(author)
+        self.assertEqual(data, [[1, 0 ,0 ,0 ,1]])
+  
+    def test_count_get_author_sole_place_by_publication(self):
+        author = "Stefano Ceri"
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        _, data = db.get_author_sole_place(author)
+        self.assertEqual(data, [[7, 0, 0, 1, 8]])
+
+  
 if __name__ == '__main__':
     unittest.main()
