@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{{ args.title }}</h1>
 
-<form name="input" action="/search/search+0+true" method="get" data-ajax="false" onSubmit="validateForm(this)">
+<form name="input" action="/search" method="get" data-ajax="false" onSubmit="validateForm(this)">
 Author Name: <input type="text" name="author" value="{{ args.author }}">
 <input type="submit" value="Submit">
 </form>
@@ -17,7 +17,7 @@ Author Name: <input type="text" name="author" value="{{ args.author }}">
 <table>
   <thead>
     <tr>
-			<th style="padding: 5px; text-align:center;" >{{ args.data[0] }}</a></th>
+			<th style="padding: 5px; text-align:center;" >{{ args.data[0] }}</th>
     </tr>
   </thead>
   <tbody>

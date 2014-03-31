@@ -1,6 +1,7 @@
 from comp61542 import app, sorter
 from database import database
-from flask import (render_template, request)
+from flask import (render_template, request, redirect)
+import string
 
 def format_data(data):
     fmt = "%.2f"
@@ -149,8 +150,8 @@ def showPublicationSummary(status):
     
     return render_template('statistics_details.html', args=args)
 
-@app.route("/search/<status>")
-def showSearch(status):
+@app.route("/search")
+def showSearch():
       
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
@@ -164,8 +165,13 @@ def showSearch(status):
     data = db.search_authors(author)
     args["data"] = (data)
     args["author"] = author
-    
-    return render_template('search.html', args=args)
+
+    if len(data[1]) == 1:
+        nameTmp = data[1][0][0].split(" ")
+        name = "+".join(nameTmp)
+        return redirect( "/show_author?author="+name)
+    else:
+        return render_template('search.html', args=args)
 
 @app.route("/show_author")
 def showAuthor():
@@ -174,7 +180,7 @@ def showAuthor():
     db = app.config['DATABASE']
     args = {"dataset":dataset, "id":"show_author"}
 
-    author = "xesto"
+    author = ""
     if "author" in request.args:
         author = request.args.get("author")
     args["title"] = "Author Details for " + author

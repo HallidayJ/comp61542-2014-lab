@@ -1,4 +1,5 @@
 from comp61542.statistics import average
+from comp61542 import sorter
 import itertools
 import numpy as np
 import re
@@ -565,27 +566,8 @@ class Database:
                     data[p.pub_type] += 1
 
         return (headers, [data])  
-    
+      
     def search_authors(self, searchname):
-        header = ("Names")
-        
-        if searchname == "":
-            return ([],[])
-
-        names = []
-        count = 0
-        
-        for au in self.get_all_authors():          
-            if searchname.lower() in au.lower():
-                count += 1
-                names.append([au])
-                
-        if count == 0:
-            return ([],[])
-        
-        return (header,names)
-    
-    def search_authors_trial(self, searchname):
         header = ("Names")
         
         if searchname == "":
@@ -593,15 +575,18 @@ class Database:
 
         pattern = "^"+searchname
 
+        surnames = []
+        forenames = []
         names = []
         count = 0
         
         for au in self.get_all_authors():
             flag = 0
+            
             if searchname.lower() in au.lower():
                 flag = 1
             
-            nameArray = str(au).split(" ")            
+            nameArray = str(au).split(" ")        
             if len(nameArray) > 1:                      
                 # The name is the first item in the list 
                 name = nameArray[0]
@@ -609,17 +594,48 @@ class Database:
                 surnamePos = len(nameArray) - 1
                 # Get surname
                 surname = nameArray[surnamePos] 
-            if re.search(pattern, surname, re.IGNORECASE):
+
+            if re.search("^"+searchname+"$", au, re.IGNORECASE):
+                surnames.append([au])
+                count += 1
+                flag = 0
+            else:
+                if re.search(pattern, surname, re.IGNORECASE):
+                    surnames.append([au])
+                    count += 1
+                    flag = 0  
+                
+                if re.search(pattern, name, re.IGNORECASE):
+                    forenames.append([au])
+                    count += 1
+                    flag = 0  
+
+            if flag == 1:
                 names.append([au])
-                count += 1        
-#            if searchname.lower() in au.lower():
-#                count += 1
-#                names.append([au])
                 
         if count == 0:
             return ([],[])
         
-        return (header,names)
+        data = []
+        
+        sort = sorter.Sorter()
+        
+        sortednames = sort.sort_asc(surnames, 0)
+        
+        for n in sortednames:
+            data.append(n)
+            
+        sortednames = sorted(forenames, key=lambda tup: tup[0])
+        
+        for n in sortednames:
+            data.append(n)
+
+        sortednames = sorted(names, key=lambda tup: tup[0])
+        
+        for n in sortednames:
+            data.append(n)
+        
+        return (header,data)
     
     def get_author_details(self, authorname):
         if authorname == "":
