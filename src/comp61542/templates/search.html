@@ -12,27 +12,23 @@ Author Name: <input type="text" name="author" value="{{ args.author }}">
 	<p>Enter a name above to search the database</p>
 {% else %}
 	<h1>Search Results for "{{ args.author }}"</h1>
-{% endif %}
+
 
 <table>
   <thead>
     <tr>
-		{% if args.sortBool %}
-			<th style="padding: 5px; text-align:center;" ><a href="{{ args.id }}+0+false?author={{ args.author}}">{{ args.data[0] }}</a></th>
-		{% else %}
-			<th style="padding: 5px; text-align:center;" ><a href="{{ args.id }}+0+true?author={{ args.author}}">{{ args.data[0] }}</a></th>
-		{%endif %}
+			<th style="padding: 5px; text-align:center;" >{{ args.data[0] }}</a></th>
     </tr>
   </thead>
   <tbody>
   {% for row in args.data[1] %}
     <tr>
-		<td style="padding: 5px; text-align:left;">Stats for <a href="/show_author?author={{ row|replace(" ","+",5) }}">{{ row[0] }}</a></td>
+		<td style="padding: 5px; text-align:left;">Stats for <a href="/show_author?author={{ row[0]|replace(" ","+",5) }}">{{ row[0] }}</a></td>
     </tr>
   {% endfor %}
   </tbody>
 </table>
-
+{% endif %}
 
 <script>
 function validateForm(form){

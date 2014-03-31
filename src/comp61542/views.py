@@ -151,17 +151,7 @@ def showPublicationSummary(status):
 
 @app.route("/search/<status>")
 def showSearch(status):
-    
-    strings = status.split("+")
-    status = strings[0]
-    index = int(strings[1])
-    sortBool  = strings[2]
-    
-    if sortBool == "false":
-        isDesc = False
-    elif sortBool == "true":
-        isDesc = True
-    
+      
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
     args = {"dataset":dataset, "id":"search"}
@@ -169,17 +159,10 @@ def showSearch(status):
     
     author=""
     if "author" in request.args:
-        author = request.args.get("author")
-    
-    sort = sorter.Sorter()
-    if isDesc:
-        sortedData = sort.sort_desc(db.search_authors(author)[1], index )
-    else:
-        sortedData = sort.sort_asc(db.search_authors(author)[1], index )
-    args["data"] = (db.search_authors(author)[0],sortedData)
+        author = request.args.get("author")  
         
-    args["sort_index"] = index
-    args["sortBool"] = isDesc
+    data = db.search_authors(author)
+    args["data"] = (data)
     args["author"] = author
     
     return render_template('search.html', args=args)
