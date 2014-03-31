@@ -1,6 +1,7 @@
 from comp61542.statistics import average
 import itertools
 import numpy as np
+import re
 from xml.sax import handler, make_parser, SAXException
 
 PublicationType = [
@@ -565,17 +566,72 @@ class Database:
 
         return (headers, [data])  
     
+    def search_authors(self, searchname):
+        header = ("Names")
+        
+        if searchname == "":
+            return ([],[])
+
+        names = []
+        count = 0
+        
+        for au in self.get_all_authors():          
+            if searchname.lower() in au.lower():
+                count += 1
+                names.append([au])
+                
+        if count == 0:
+            return ([],[])
+        
+        return (header,names)
+    
+    def search_authors_trial(self, searchname):
+        header = ("Names")
+        
+        if searchname == "":
+            return ([],[])
+
+        pattern = "^"+searchname
+
+        names = []
+        count = 0
+        
+        for au in self.get_all_authors():
+            flag = 0
+            if searchname.lower() in au.lower():
+                flag = 1
+            
+            nameArray = str(au).split(" ")            
+            if len(nameArray) > 1:                      
+                # The name is the first item in the list 
+                name = nameArray[0]
+                # Position of surname is the last item in the list
+                surnamePos = len(nameArray) - 1
+                # Get surname
+                surname = nameArray[surnamePos] 
+            if re.search(pattern, surname, re.IGNORECASE):
+                names.append([au])
+                count += 1        
+#            if searchname.lower() in au.lower():
+#                count += 1
+#                names.append([au])
+                
+        if count == 0:
+            return ([],[])
+        
+        return (header,names)
+    
     def get_author_details(self, authorname):
         if authorname == "":
             return ([],[])
-        
+
         names = []
         count = 0
-        for au in self.get_all_authors():
+        
+        for au in self.get_all_authors():          
             if authorname.lower() in au.lower():
                 count += 1
                 names.append(au)
-                
                 
         if count == 0:
             return ([],[])

@@ -173,10 +173,10 @@ def showSearch(status):
     
     sort = sorter.Sorter()
     if isDesc:
-        sortedData = sort.sort_desc(db.get_author_details(author)[1], index )
+        sortedData = sort.sort_desc(db.search_authors(author)[1], index )
     else:
-        sortedData = sort.sort_asc(db.get_author_details(author)[1], index )
-    args["data"] = (db.get_author_details(author)[0],sortedData)
+        sortedData = sort.sort_asc(db.search_authors(author)[1], index )
+    args["data"] = (db.search_authors(author)[0],sortedData)
         
     args["sort_index"] = index
     args["sortBool"] = isDesc
