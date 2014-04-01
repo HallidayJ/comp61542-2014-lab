@@ -63,11 +63,15 @@ class Sorter:
 
         return data
 
-    def sort_desc(self, data, index):        
+    def sort_desc(self, data, index):                        
         for idx in range(0, len(data)):
             tmpAuthor = list(data[idx])
+#             print tmpAuthor
             # Split the name into an array
-            nameArray = tmpAuthor[0].split(" ")
+            nameArray = str(tmpAuthor[0]).split(" ")
+            
+#             print "after split"
+            
             if len(nameArray) > 1:
                 # The name is the first item in the list 
                 name = nameArray[0]
@@ -86,15 +90,14 @@ class Sorter:
                 tmpAuthor[0] = " ".join(nameArray)
     #             print author[0]
                 data[idx] = tuple(tmpAuthor)
-               
+                
         data = sorted(data, key=lambda tup: tup[0], reverse=True)
         if index != 0:  
             data = sorted(data, key=lambda tup: tup[index], reverse=True)
-        
         for idx in range(0, len(data)):
             tmpAuthor = list(data[idx])
             # Split the name using spaces
-            nameArray = tmpAuthor[0].split(" ")          
+            nameArray = str(tmpAuthor[0]).split(" ")          
             # Take the Join surname_name
             nameSurName = nameArray[0]
             # Split them using "_"
@@ -111,5 +114,5 @@ class Sorter:
             tmpAuthor[0] = " ".join(nameArray)                 
 #             print author[0]
             data[idx] = tuple(tmpAuthor)
-
         return data
+    
