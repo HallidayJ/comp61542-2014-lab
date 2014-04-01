@@ -18,7 +18,7 @@ Author Name: <input type="text" name="author" value="{{ args.author }}">
   <thead>
   	
     <tr>
-    	{% if args.data[0] == "" %}
+    	{% if args.data[0]|length > 0 %}
 			<th style="padding: 5px; text-align:center;" >{{ args.data[0] }}</th>	
 		{% else %}
 			<th style="padding: 5px; text-align:center;" >No results Found!</th>
