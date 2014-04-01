@@ -133,7 +133,6 @@ def showPublicationSummary(status):
     if (status == "author_year"):
         args["title"] = "Author by Year"
         
-        sort = sorter.Sorter()
         data = db.get_author_totals_by_year()   
         
 #         args["data"] = db.get_author_totals_by_year()
