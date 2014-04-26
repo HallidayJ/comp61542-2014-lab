@@ -137,4 +137,28 @@ class TestSearch(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
         data = db.degree_of_separation(author1, author2)
-        self.assertEqual(data, ["X"])
+        self.assertEqual(data, "X")
+        
+    def test_degree_of_seperation_invalid_author1(self):
+        author1 = "A"
+        author2 = "Author F"
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
+        data = db.degree_of_separation(author1, author2)
+        self.assertEqual(data, "F")
+    
+    def test_degree_of_seperation_invalid_author2(self):
+        author1 = "Author A"
+        author2 = "F"
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
+        data = db.degree_of_separation(author1, author2)
+        self.assertEqual(data, "F")
+    
+    def test_degree_of_seperation_invalid_authors(self):
+        author1 = "A"
+        author2 = "F"
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
+        data = db.degree_of_separation(author1, author2)
+        self.assertEqual(data, "F")
