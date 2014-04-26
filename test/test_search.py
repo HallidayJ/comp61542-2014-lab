@@ -106,6 +106,38 @@ class TestSearch(unittest.TestCase):
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
         _, data = db.get_author_sole_place(author)
         self.assertEqual(data, [[7, 0, 0, 1, 8]])
+        
+    def test_degree_of_seperation_seperationof0(self):
+        author1 = ""
+        author2 = ""
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
+        _, data = db.get_author_seperation(author1, author2)
+        self.assertEqual(data, "0")
+    
+    def test_degree_of_seperation_seperationof1(self):
+        author1 = ""
+        author2 = ""
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
+        _, data = db.get_author_seperation(author1, author2)
+        self.assertEqual(data, "1")
+
+    def test_degree_of_seperation_seperationof2(self):
+        author1 = ""
+        author2 = ""
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
+        _, data = db.get_author_seperation(author1, author2)
+        self.assertEqual(data, "2")
+
+    def test_degree_of_seperation_noconnection(self):
+        author1 = ""
+        author2 = ""
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
+        _, data = db.get_author_seperation(author1, author2)
+        self.assertEqual(data, "X")
 
   
 if __name__ == '__main__':
