@@ -108,36 +108,36 @@ class TestSearch(unittest.TestCase):
         self.assertEqual(data, [[7, 0, 0, 1, 8]])
         
     def test_degree_of_seperation_seperationof0(self):
-        author1 = ""
-        author2 = ""
+        author1 = "Author A"
+        author2 = "Author B"
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
-        _, data = db.get_author_seperation(author1, author2)
-        self.assertEqual(data, "0")
+        data = db.degree_of_separation(author1, author2)
+        self.assertEqual(data, [0])
     
     def test_degree_of_seperation_seperationof1(self):
-        author1 = ""
-        author2 = ""
+        author1 = "Author C"
+        author2 = "Author D"
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
-        _, data = db.get_author_seperation(author1, author2)
-        self.assertEqual(data, "1")
+        data = db.degree_of_separation(author1, author2)
+        self.assertEqual(data, [1])
 
     def test_degree_of_seperation_seperationof2(self):
-        author1 = ""
-        author2 = ""
+        author1 = "Author E"
+        author2 = "Author C"
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
-        _, data = db.get_author_seperation(author1, author2)
-        self.assertEqual(data, "2")
+        data = db.degree_of_separation(author1, author2)
+        self.assertEqual(data, [2])
 
     def test_degree_of_seperation_noconnection(self):
-        author1 = ""
-        author2 = ""
+        author1 = "Author A"
+        author2 = "Author F"
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "dblp_seperation_test.xml")))
-        _, data = db.get_author_seperation(author1, author2)
-        self.assertEqual(data, "X")
+        data = db.degree_of_separation(author1, author2)
+        self.assertEqual(data, ["X"])
 
   
 if __name__ == '__main__':

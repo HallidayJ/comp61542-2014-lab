@@ -436,7 +436,7 @@ class Database:
             elif "X" in path:
                 return ("X")
             
-        return ([len(path)-1])
+        return ([len(path)-2])
 
     def get_author_publication_number(self, authorname):
         headers = "Publications"
