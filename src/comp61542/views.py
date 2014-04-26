@@ -213,9 +213,33 @@ def showAuthor():
         "rows":db.get_author_sole_place(author)[1]})
 
 
-    args['tables'] = tables
-    
-    
-    
+    args['tables'] = tables 
     
     return render_template('show_author.html', args=args)
+
+@app.route("/network")
+def showNetwork():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    PUB_TYPES = ["Conference Papers", "Journals", "Books", "Book Chapters", "All Publications"]
+    args = {"dataset":dataset, "id":"network"}
+    args["title"] = "Authors Network"
+
+    first_author = ""
+    if "first_author" in request.args:
+        first_author = request.args.get("first_author")
+
+    second_author = ""
+    if "second_author" in request.args:
+        second_author = request.args.get("second_author")
+
+    pub_type = 4
+    if "pub_type" in request.args:
+        pub_type = int(request.args.get("pub_type"))
+
+    #args["data"] = [7]
+    args["data"] = db.degree_of_separation(first_author, second_author)
+    args["first_author"] = first_author
+    args["second_author"] = second_author
+    args["pub_str"] = PUB_TYPES[pub_type]
+    return render_template("network.html", args=args)

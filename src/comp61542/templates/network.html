@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block content %}
+<h1>{{ args.title }}</h1>
+
+<form name="input" action="/network" method="get" data-ajax="false" onSubmit="validateForm(this)">
+First Author: <input type="text" name="first_author" value="{{ args.first_author }}">
+Second Author: <input type="text" name="second_author" value="{{ args.second_author }}">
+Publication type:
+
+<select name="pub_type">
+  <option value="4">All Publications</option>
+  <option value="0"{% if args.pub_type == 0 %} selected="selected"{% endif %}>Conference Paper</option>
+  <option value="1"{% if args.pub_type == 1 %} selected="selected"{% endif %}>Journal</option>
+  <option value="2"{% if args.pub_type == 2 %} selected="selected"{% endif %}>Book</option>
+  <option value="3"{% if args.pub_type == 3 %} selected="selected"{% endif %}>Book Chapter</option>
+</select>
+
+<input type="submit" value="Submit">
+</form>
+{% if args.first_author != "" and args.second_author != "" %}
+<br>
+<ul>
+  <li>Degree of Separation between {{ args.first_author }} and {{ args.second_author }} is {{ args.data[0] }}</li>
+</ul>
+{% endif %}
+
+{% if args.first_author == "" or args.second_author == "" %}
+<br>
+<ul>
+  <li>Please enter both authors</li>
+</ul>
+{% endif %}
+
+
+<script>
+function validateForm(form){
+  first_author = form["first_author"].value;
+  second_author = form["second_author"].value;
+  if (fist_author == "" || second_author == ""){
+    alert("Enter authors");
+    return false;
+  }
+  return true;
+}
+</script>
+{% endblock %}

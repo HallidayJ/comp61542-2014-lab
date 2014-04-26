@@ -34,6 +34,33 @@ class Stat:
     MEDIAN = 1
     MODE = 2
 
+class MyQUEUE: # just an implementation of a queue
+    
+    def __init__(self):
+        self.holder = []
+        
+    def enqueue(self,val):
+        self.holder.append(val)
+        
+    def dequeue(self):
+        val = None
+        try:
+            val = self.holder[0]
+            if len(self.holder) == 1:
+                self.holder = []
+            else:
+                self.holder = self.holder[1:]    
+        except:
+            pass
+            
+        return val    
+        
+    def IsEmpty(self):
+        result = False
+        if len(self.holder) == 0:
+            result = True
+        return result
+
 class Database:
     def read(self, filename):
         self.publications = []
@@ -362,6 +389,54 @@ class Database:
                 if a < a2:
                     links.add((a, a2))
         return (nodes, links)
+
+
+    def get_graph(self):
+        graph = {}
+        authors = self.get_all_authors()
+        for author in authors:
+            graph[author] = self.get_coauthor_details(author)
+        return graph
+
+    def BFS(self,start,end):
+        
+        if start == end:
+            return ([start])
+
+        graph = self.get_graph()
+        q = MyQUEUE() # now we make a queue
+
+        temp_path = [start]
+        
+        q.enqueue(temp_path)
+        
+        while q.IsEmpty() == False:
+            tmp_path = q.dequeue()
+            last_node = tmp_path[len(tmp_path)-1]
+
+            if last_node == end:
+                return (tmp_path)
+            for link_node in graph[last_node]:
+                if link_node not in tmp_path:
+                    new_path = []
+                    new_path = tmp_path + [link_node[0]]
+                    q.enqueue(new_path)
+        return ("X")
+
+    def degree_of_separation(self,start,end):
+        
+        if start == "" or end == "":
+            return (-1)
+        
+        path = self.BFS(start,end)
+
+        if len(path) == 1:
+            if start in path:
+                return ("0")
+            elif "X" in path:
+                return ("X")
+            
+        return ([len(path)-1])
 
     def get_author_publication_number(self, authorname):
         headers = "Publications"
