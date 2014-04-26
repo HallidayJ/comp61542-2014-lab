@@ -389,52 +389,97 @@ class Database:
                 if a < a2:
                     links.add((a, a2))
         return (nodes, links)
-
-
-    def get_graph(self):
+    
+    def _get_collaborations_d(self, author_id, include_self):
+        data = {}
+        for p in self.publications:
+            if author_id in p.authors:
+                for a in p.authors:
+                    try:
+                        data[self.authors[a].name] = 1
+                    except KeyError:
+                        data[a] = 1
+        if not include_self:
+            del data[self.authors[author_id].name]
+        return data
+    
+    def get_graph_d(self):
         graph = {}
         authors = self.get_all_authors()
         for author in authors:
-            graph[author] = self.get_coauthor_details(author)
+            author_id = self.author_idx[author]
+            data = self._get_collaborations_d(author_id, True)
+            graph[author] = data
         return graph
 
-    def BFS(self,start,end):
+    def dijkstra(self, s, t):
+        # sanity check
+        if s == t:
+            #return "The start and terminal nodes are the same. Minimum distance is 0."
+            return ([s])
+        net = self.get_graph_d()
+        if net.has_key(s)==False:
+            #return "There is no start node called " + str(s) + "."
+            return ("F")
+        if net.has_key(t)==False:
+            #return "There is no terminal node called " + str(t) + "."
+            return ("F")
+        # create a labels dictionary
+        labels={}
+        # record whether a label was updated
+        order={}
+        # populate an initial labels dictionary
+        for i in net.keys():
+            if i == s: labels[i] = 0 # shortest distance form s to s is 0
+            else: labels[i] = float("inf") # initial labels are infinity
+        from copy import copy
+        drop1 = copy(labels) # used for looping
         
-        if start == end:
-            return ([start])
+        ## begin algorithm
+        while len(drop1) > 0:
+            # find the key with the lowest label
+            minNode = min(drop1, key = drop1.get) #minNode is the node with the smallest label
+            # update labels for nodes that are connected to minNode
+            for i in net[minNode]:
+                if labels[i] > (labels[minNode] + net[minNode][i]):
+                    labels[i] = labels[minNode] + net[minNode][i]
+                    drop1[i] = labels[minNode] + net[minNode][i]
+                    order[i] = minNode
+            del drop1[minNode] # once a node has been visited, it's excluded from drop1
 
-        graph = self.get_graph()
-        q = MyQUEUE() # now we make a queue
-
-        temp_path = [start]
-        
-        q.enqueue(temp_path)
-        
-        while q.IsEmpty() == False:
-            tmp_path = q.dequeue()
-            last_node = tmp_path[len(tmp_path)-1]
-
-            if last_node == end:
-                return (tmp_path)
-            for link_node in graph[last_node]:
-                if link_node not in tmp_path:
-                    new_path = []
-                    new_path = tmp_path + [link_node[0]]
-                    q.enqueue(new_path)
-        return ("X")
+        ## end algorithm
+        # print shortest path
+        temp = copy(t)
+        rpath = []
+        path = []
+        while 1:
+            rpath.append(temp)
+            if order.has_key(temp): temp = order[temp]
+            #else: return "There is no path from " + str(s) + " to " + str(t) + "."
+            else: return ("X")
+            if temp == s:
+                rpath.append(temp)
+                break
+        for j in range(len(rpath)-1,-1,-1):
+            path.append(rpath[j])
+        #return "The shortest path from " + s + " to " + t + " is " + str(path) + ".
+        return (path)
 
     def degree_of_separation(self,start,end):
         
         if start == "" or end == "":
             return (-1)
         
-        path = self.BFS(start,end)
-
+        #path = self.BFS(start,end)
+        path = self.dijkstra(start, end)
+        
         if len(path) == 1:
             if start in path:
                 return ("0")
             elif "X" in path:
                 return ("X")
+            elif "F" in path:
+                return ("F")
             
         return ([len(path)-2])
 
