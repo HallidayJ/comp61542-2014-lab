@@ -4,28 +4,33 @@
 <h1>{{ args.title }}</h1>
 
 <form name="input" action="/network" method="get" data-ajax="false" onSubmit="validateForm(this)">
-First Author: <input type="text" name="first_author" value="{{ args.first_author }}">
-Second Author: <input type="text" name="second_author" value="{{ args.second_author }}">
-Publication type:
+First Author:
+<select name="author1">
+	<option value="0">[Select Author]</option>
+	{% for row in args.authors %}
+		<option value={{ row|replace(" ","+",5) }} {% if args.author1 == row|replace(" ","+",5) %} selected="selected"{% endif %}>{{ row }}</option>
+	{% endfor %}	
+</select>
 
-<select name="pub_type">
-  <option value="4">All Publications</option>
-  <option value="0"{% if args.pub_type == 0 %} selected="selected"{% endif %}>Conference Paper</option>
-  <option value="1"{% if args.pub_type == 1 %} selected="selected"{% endif %}>Journal</option>
-  <option value="2"{% if args.pub_type == 2 %} selected="selected"{% endif %}>Book</option>
-  <option value="3"{% if args.pub_type == 3 %} selected="selected"{% endif %}>Book Chapter</option>
+Second Author:
+<select name="author2">
+	<option value="0">[Select Author]</option>
+	{% for row in args.authors %}
+		<option value={{ row|replace(" ","+",5) }} {% if args.author2 == row|replace(" ","+",5) %} selected="selected"{% endif %}>{{ row }}</option>
+	{% endfor %}	
 </select>
 
 <input type="submit" value="Submit">
 </form>
-{% if args.first_author != "" and args.second_author != "" %}
+
+{% if args.author1 != 0 and args.author2 != 0 %}
 <br>
 <ul>
-  <li>Degree of Separation between {{ args.first_author }} and {{ args.second_author }} is {{ args.data[0] }}</li>
+  <li>Degree of Separation between {{ args.author1txt }} and {{ args.author2txt }} is {{ args.data[0] }}</li>
 </ul>
 {% endif %}
 
-{% if args.first_author == "" or args.second_author == "" %}
+{% if args.author1 == 0 or args.author2 == 0 %}
 <br>
 <ul>
   <li>Please enter both authors</li>
@@ -35,9 +40,9 @@ Publication type:
 
 <script>
 function validateForm(form){
-  first_author = form["first_author"].value;
-  second_author = form["second_author"].value;
-  if (fist_author == "" || second_author == ""){
+  author1 = form["author1"].value;
+  author2 = form["author2"].value;
+  if (author1 == "0" || author2 == "0"){
     alert("Enter authors");
     return false;
   }

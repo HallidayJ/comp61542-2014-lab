@@ -221,25 +221,26 @@ def showAuthor():
 def showNetwork():
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
-    PUB_TYPES = ["Conference Papers", "Journals", "Books", "Book Chapters", "All Publications"]
     args = {"dataset":dataset, "id":"network"}
     args["title"] = "Authors Network"
 
-    first_author = ""
-    if "first_author" in request.args:
-        first_author = request.args.get("first_author")
+    author1 = 0
+    author1txt = ""
+    if "author1" in request.args:
+        author1 = request.args.get("author1")
+        author1txt = author1.replace("+", " ")
 
-    second_author = ""
-    if "second_author" in request.args:
-        second_author = request.args.get("second_author")
+    author2 = 0
+    author2txt = ""
+    if "author2" in request.args:
+        author2 = request.args.get("author2")
+        author2txt = author2.replace("+", " ")
 
-    pub_type = 4
-    if "pub_type" in request.args:
-        pub_type = int(request.args.get("pub_type"))
-
-    #args["data"] = [7]
-    args["data"] = db.degree_of_separation(first_author, second_author)
-    args["first_author"] = first_author
-    args["second_author"] = second_author
-    args["pub_str"] = PUB_TYPES[pub_type]
+    args["authors"] = db.get_all_authors()
+    args["data"] = db.degree_of_separation(author1txt, author2txt)
+    args["author1"] = author1
+    args["author2"] = author2
+    args["author1txt"] = author1txt
+    args["author2txt"] = author2txt
+    
     return render_template("network.html", args=args)
