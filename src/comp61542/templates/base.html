@@ -1,23 +1,142 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-
-  <head>
-    <title>{% block title %}{% endblock %}</title>
-  </head>
-
-  <body>
-    <div id="page">
-      <div id="header">
-        <h1>COMP61542: {{ args.dataset }}</h1>
-
-        <div id="navigation">
-          <a href="/">Home</a>
-        </div>
-      </div>
-
-      <div id="content">
-        {% block content %}{% endblock %}
-      </div>
-    </div>
-  </body>
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+		<meta charset="UTF-8">
+		<meta name=description content="">
+		<meta name=viewport content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+	    <script type="text/javascript" src= "{{ url_for('static', filename='js/jquery-2.1.0.min.js') }}"></script>
+	    <script type="text/javascript" src= "{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+	</head>
+	<body>
+		<div class="navbar navbar-inverse navbar-static-top">
+			<div class="container">
+				<a href="#" class="navbar-brand">UoM Publications</a>
+				<button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<div class="collapse navbar-collapse navHeaderCollapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active"><a href="/statisticsdetails/publication_summary+0+false">Home</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Publications <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="/statisticsdetails/publication_summary+0+false">Summary</a></li>
+								<li><a href="/statisticsdetails/publication_author+0+false">By Author</a></li>
+								<li><a href="/statisticsdetails/publication_year+0+false">By Year</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Collaborations <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="/coauthors">Author Collaboration</a></li>
+								<li><a href="/network">Author Network</a></li>
+							</ul>
+						</li>
+						<li><a href="#">Blog</a></li>
+						<li><a href="#contact" data-toggle="modal">Contact</a></li>
+						<li><a href="#">About</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row well text"><h1><strong>COMP61542 Active Dataset: {{ args.dataset }}</strong></h1></div>
+			<div class="row well text-center">
+				  <div class="col-xs-4 col-md-3 ">
+				    <a href="/statisticsdetails/publication_summary+0+false" >
+				      <img src="{{ url_for('static', filename='images/reports-icon.png') }}" alt="Publications" class="imgsize"><p>Publications Summary</p>
+				    </a>
+				  </div>
+				  <div class="col-xs-4 col-md-3">
+				    <a href="/statisticsdetails/publication_author+0+false" >
+				      <img src="{{ url_for('static', filename='images/author.png') }}" alt="Authors" class="imgsize"><p>Publications by Author</p>
+				    </a>
+				  </div>
+				  <div class="col-xs-4 col-md-3">
+				    <a href="/statisticsdetails/publication_year+0+false" >
+				      <img src="{{ url_for('static', filename='images/Bar-Chart-icon.png') }}" alt="Publications by Year" class="imgsize"><p>Publications by Year</p>
+				    </a>
+				  </div>
+				  <div class="col-xs-4 col-md-3">
+				    <a href="/search">
+				      <img src="{{ url_for('static', filename='images/Search-2-icon.png') }}" alt="Author Search" class="imgsize"><p>Author Search</p>
+				    </a>
+				  </div>
+				</div>
+				<div class="row well text-center">
+				  <div class="col-xs-4 col-md-3">
+				    <a href="/coauthors">
+				      <img src="{{ url_for('static', filename='images/Groups-Meeting-Dark-icon.png') }}" alt="Co-Authors" class="imgsize"><p>Co-Authors</p>
+				    </a>
+				  </div>
+				  <div class="col-xs-4 col-md-3">
+				    <a href="/averages">
+				      <img src="{{ url_for('static', filename='images/Management-Statistics-icon.png') }}" alt="Averages" class="imgsize"><p>Averages</p>
+				    </a>
+				  </div>
+				  <div class="col-xs-4 col-md-3">
+				    <a href="/statisticsdetails/author_year+0+false">
+				      <img src="{{ url_for('static', filename='images/statistics-icon.png') }}" alt="Author by Year" class="imgsize"><p>Author by Year</p>
+				    </a>
+				  </div>
+				  <div class="col-xs-4 col-md-3">
+				    <a href="/network">
+				      <img src="{{ url_for('static', filename='images/network.png') }}" alt="Author Network" class="imgsize"><p>Author Collaboration Network</p>
+				    </a>
+				  </div>
+				</div>
+			<div class="row">
+				
+					{% block content %}{% endblock %}
+				
+			</div>
+		</div>
+		<div class="navbar navbar-inverse navbar-fixed-bottom">
+			<div class="container">
+				<p class="navbar-text pull-left">Site Built By Hunt Team</p>
+				<a href="#" class="navbar-btn btn btn-primary pull-right">Subscribe on Youtube</a>
+			</div>
+		</div>
+		<div class="modal fade" id="contact" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form action="" class="form-horizontal">
+						<div class="modal-header">
+							<h4>Contact Us</h4>
+						</div>
+						<div class="modal-body">
+						<div class="form-group">
+							<label for="contact-name" class="col-lg-2 control-label">Name</label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" id="contact-name" Placeholder="Please, enter your full name here.">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="contact-email" class="col-lg-2 control-label">Email</label>
+							<div class="col-lg-10">
+								<input type="email" class="form-control" id="contact-email" Placeholder="Please, enter a valid email here.">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="contact-message" class="col-lg-2 control-label">Message</label>
+							<div class="col-lg-10">
+								<textarea name="" rows="7" class="form-control"></textarea>
+							</div>
+						</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-primary" type="submit">Send</button>
+							<a href="#" class="btn btn-default" data-dismiss="modal">Close </a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

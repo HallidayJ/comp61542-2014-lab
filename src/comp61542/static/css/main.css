@@ -54,3 +54,13 @@ ul li{
 	padding-top: 7px;
 	padding-bottom: 7px;
 }
+td
+{
+margin:5px;
+padding: 5px;
+}
+th
+{
+margin:5px;
+padding: 5px;
+}
