@@ -115,7 +115,9 @@ def showPublicationSummary(status):
     dataset = app.config['DATASET']
     db = app.config['DATABASE']
     args = {"dataset":dataset, "id":status}
-
+    
+    args["hasRef"] = False
+    
     if (status == "publication_summary"):
         args["title"] = "Publication Summary"
         data = db.get_publication_summary()
@@ -124,6 +126,7 @@ def showPublicationSummary(status):
     if (status == "publication_author"):
         args["title"] = "Author Publication"
         data = db.get_publications_by_author()     
+        args["hasRef"]
 #         args["data"] = data
 
     if (status == "publication_year"):
