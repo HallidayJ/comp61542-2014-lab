@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ args.title }}{% endblock %}
 {% block content %}
-<h1>{{ args.title }}</h1>
+<h3>{{ args.title }}</h3>
 
 <form name="input" action="/network" method="get" data-ajax="false" onSubmit="validateForm(this)">
 First Author:
@@ -25,6 +25,7 @@ Second Author:
 
 {% if args.author1 != 0 and args.author2 != 0 %}
 <br>
+<h4>Degree of seperation</h4>
 <ul>
   <li>Degree of Separation between {{ args.author1txt }} and {{ args.author2txt }} is {{ args.data[0] }}</li>
 </ul>

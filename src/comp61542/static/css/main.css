@@ -54,6 +54,10 @@ ul li{
 	padding-top: 7px;
 	padding-bottom: 7px;
 }
+table
+{
+	border: 1px; 
+}
 td
 {
 margin:5px;

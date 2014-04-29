@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}{{ args.title }}{% endblock %}
 {% block content %}
-<h1>{{ args.title }}</h1>
+<h3>{{ args.title }}</h3>
 <br/>
 
 {% for table in args.tables %}
-<h2>{{ table.title }}</h2>
-<table>
+<h4>{{ table.title }}</h4>
+<table class="table table-striped table-hover table-condensed table-responsive">
   <thead>
     <tr>
       {% for column in table.header %}
