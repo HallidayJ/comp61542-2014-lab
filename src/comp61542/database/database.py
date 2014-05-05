@@ -3,6 +3,7 @@ from comp61542 import sorter
 import itertools
 import numpy as np
 import re
+import time
 from xml.sax import handler, make_parser, SAXException
 import networkx as nx
 from networkx.exception import NetworkXNoPath
@@ -75,7 +76,7 @@ class Database:
         self.author_idx = {}
         self.min_year = None
         self.max_year = None
-        self.G = G = nx.Graph()
+        self.G = nx.Graph()
 
         handler = DocumentHandler(self)
         parser = make_parser()
@@ -101,7 +102,7 @@ class Database:
             author_id = self.author_idx[author]
             data = self._get_collaborations_d(author_id, True)
             for edge in data:
-                G.add_edge(author,edge)
+                self.G.add_edge(author,edge)
 
         return valid
 
@@ -427,6 +428,35 @@ class Database:
             data = self._get_collaborations_d(author_id, True)
             graph[author] = data
         return graph
+    
+    def create_graph_nx(self, startauthor, endauthor):
+        path = self.separation_path(startauthor, endauthor)
+        
+        pathG = nx.Graph()
+        for p in path:
+            for pb in range (0, len(p)- 1):
+                pathG.add_edge(p[pb], p[pb+1])
+        
+        #nxpath = nx.shortest_path_length(G)
+        #p = nx.all_simple_paths(pathG, startauthor, endauthor, len(authors))
+
+        pos=nx.spring_layout(pathG) # positions for all nodes
+
+        # nodes
+        nx.draw_networkx_nodes(pathG,pos,node_size=700)
+        
+        # edges
+        nx.draw_networkx_edges(pathG,pos,width=6)
+        nx.draw_networkx_edges(pathG,pos,width=6,alpha=0.5,edge_color='b',style='dashed')
+        
+        # labels
+        nx.draw_networkx_labels(pathG,pos,font_size=20,font_family='sans-serif')
+        
+        plt.axis('off')
+        filename = "D:\\GitHub\\comp61542-2014-lab\\src\\comp61542\\static\\images\\weighted_graph.png"
+        plt.savefig(filename, transparent=False) # save as png
+        plt.close()
+        #plt.show() # display
 
     def dijkstra(self, s, t):
         # sanity check
@@ -496,6 +526,7 @@ class Database:
         elif length == "X":
             return ([length])
         else:
+            self.create_graph_nx(start,end)
             return ([length-1])
     
     def separation_path(self,start,end):
