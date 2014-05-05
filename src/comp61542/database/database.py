@@ -5,6 +5,8 @@ import numpy as np
 import re
 from xml.sax import handler, make_parser, SAXException
 import networkx as nx
+from networkx.exception import NetworkXNoPath
+
 try:
     import matplotlib.pyplot as plt
 except:
@@ -73,6 +75,7 @@ class Database:
         self.author_idx = {}
         self.min_year = None
         self.max_year = None
+        self.G = G = nx.Graph()
 
         handler = DocumentHandler(self)
         parser = make_parser()
@@ -91,6 +94,14 @@ class Database:
                 self.min_year = p.year
             if self.max_year == None or p.year > self.max_year:
                 self.max_year = p.year
+        
+        authors = self.get_all_authors()
+            
+        for author in authors:
+            author_id = self.author_idx[author]
+            data = self._get_collaborations_d(author_id, True)
+            for edge in data:
+                G.add_edge(author,edge)
 
         return valid
 
@@ -407,42 +418,7 @@ class Database:
         if not include_self:
             del data[self.authors[author_id].name]
         return data
-    
-    def create_graph_nx(self):
-        
-        G = nx.Graph()
-        
-        authors = self.get_all_authors()
-        
-        for author in authors:
-            G.add_node(author)
-            
-        for author in authors:
-            author_id = self.author_idx[author]
-            data = self._get_collaborations_d(author_id, True)
-            for edge in data:
-                G.add_edge(author,edge)
-            
-        
-        p = nx.shortest_path_length(G)
-        #print p[self.author_idx["Simon Harper"]][self.author_idx["Amos Bairoch"]]
-        #print([p for p in nx.all_shortest_paths(G,self.author_idx["Simon Harper"],self.author_idx["Amos Bairoch"])])
-        pos=nx.spring_layout(G) # positions for all nodes
-
-        # nodes
-        nx.draw_networkx_nodes(G,pos,node_size=700)
-        
-        # edges
-        nx.draw_networkx_edges(G,pos,width=6)
-        nx.draw_networkx_edges(G,pos,width=6,alpha=0.5,edge_color='b',style='dashed')
-        
-        # labels
-        nx.draw_networkx_labels(G,pos,font_size=20,font_family='sans-serif')
-        
-        plt.axis('off')
-        plt.savefig("weighted_graph.png") # save as png
-        plt.show() # display
-        
+           
     def get_graph_d(self):
         graph = {}
         authors = self.get_all_authors()
@@ -509,27 +485,35 @@ class Database:
         
         if start == "" or end == "":
             return (-1)
-        
-        #path = self.BFS(start,end)
-        path = self.dijkstra(start, end)
-        
-        if len(path) == 1:
-            if start in path:
-                return ("0")
-            elif "X" in path:
-                return ("X")
-            elif "F" in path:
-                return ("F")
+
+        try: 
+            length = nx.shortest_path_length(self.G, start, end)
+        except nx.NetworkXNoPath:
+            length = "X"
             
-        self.create_graph_nx()
-        return ([len(path)-2])
+        if length == 0:
+            return ([length])
+        elif length == "X":
+            return ([length])
+        else:
+            return ([length-1])
     
     def separation_path(self,start,end):
         
         if start == "" or end == "":
             return (-1)
         
-        #path = self.BFS(start,end)
+        try: 
+            length = nx.shortest_path_length(self.G, start, end)
+        except nx.NetworkXNoPath:
+            return ([])
+        return ([p for p in nx.all_shortest_paths(self.G, source=start, target=end)])
+    
+    def separation_path_andreas(self,start,end):
+        
+        if start == "" or end == "":
+            return (-1)
+        
         path = self.dijkstra(start, end)
         
         if len(path) == 1:

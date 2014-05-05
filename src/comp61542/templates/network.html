@@ -32,12 +32,15 @@ Second Author:
   {% if args.data[0] == "0"  %}
   	{{ args.author1txt }} -> {{ args.author2txt }}
   {% elif args.data[0] != "X" and args.data[0] != "F" %}
-  	{% for author in args.path %}
-  		{% if loop.last %}
-		  {{ author }} 
-		{% else %}
-      	  {{ author }} ->
-       {%endif %}
+  	{% for path in args.path %}
+  		{% for author in path %}
+	  		{% if loop.last %}
+			  {{ author }} 
+			{% else %}
+	      	  {{ author }} ->
+	       {%endif %}
+		{% endfor %}
+		<br>
 	{% endfor %}	
   {% endif %}
   
