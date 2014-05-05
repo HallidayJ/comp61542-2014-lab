@@ -4,6 +4,11 @@ import itertools
 import numpy as np
 import re
 from xml.sax import handler, make_parser, SAXException
+import networkx as nx
+try:
+    import matplotlib.pyplot as plt
+except:
+    raise
 
 PublicationType = [
     "Conference Paper", "Journal", "Book", "Book Chapter"]
@@ -403,6 +408,30 @@ class Database:
             del data[self.authors[author_id].name]
         return data
     
+    def create_graph_nx(self):
+        G = nx.Graph()
+        
+        authors = self.get_all_authors()
+        
+        collabs = {}
+        for author in authors:
+            G.add_node(author)
+            
+        for author in authors:
+            author_id = self.author_idx[author]
+            data = self._get_collaborations_d(author_id, True)
+            for edge in data:
+                G.add_edge(author_id,self.author_idx[edge])
+            
+        p = nx.shortest_path_length(G)
+        print p[self.author_idx["Simon Harper"]][self.author_idx["Amos Bairoch"]]
+        print([p for p in nx.all_shortest_paths(G,self.author_idx["Simon Harper"],self.author_idx["Amos Bairoch"])])
+        nx.draw(G)
+        
+        #plt.axis('off')
+        plt.savefig("weighted_graph.png") # save as png
+        #plt.show() # display
+    
     def get_graph_d(self):
         graph = {}
         authors = self.get_all_authors()
@@ -481,6 +510,7 @@ class Database:
             elif "F" in path:
                 return ("F")
             
+        self.create_graph_nx()
         return ([len(path)-2])
     
     def separation_path(self,start,end):
