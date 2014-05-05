@@ -409,11 +409,11 @@ class Database:
         return data
     
     def create_graph_nx(self):
+        
         G = nx.Graph()
         
         authors = self.get_all_authors()
         
-        collabs = {}
         for author in authors:
             G.add_node(author)
             
@@ -421,12 +421,12 @@ class Database:
             author_id = self.author_idx[author]
             data = self._get_collaborations_d(author_id, True)
             for edge in data:
-                G.add_edge(author_id,self.author_idx[edge],name=edge)
-                G.add
+                G.add_edge(author,edge)
             
+        
         p = nx.shortest_path_length(G)
-        print p[self.author_idx["Simon Harper"]][self.author_idx["Amos Bairoch"]]
-        print([p for p in nx.all_shortest_paths(G,self.author_idx["Simon Harper"],self.author_idx["Amos Bairoch"])])
+        #print p[self.author_idx["Simon Harper"]][self.author_idx["Amos Bairoch"]]
+        #print([p for p in nx.all_shortest_paths(G,self.author_idx["Simon Harper"],self.author_idx["Amos Bairoch"])])
         pos=nx.spring_layout(G) # positions for all nodes
 
         # nodes
@@ -439,10 +439,10 @@ class Database:
         # labels
         nx.draw_networkx_labels(G,pos,font_size=20,font_family='sans-serif')
         
-        #plt.axis('off')
+        plt.axis('off')
         plt.savefig("weighted_graph.png") # save as png
-        #plt.show() # display
-    
+        plt.show() # display
+        
     def get_graph_d(self):
         graph = {}
         authors = self.get_all_authors()
