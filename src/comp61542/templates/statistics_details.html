@@ -6,33 +6,70 @@
 
 <table class="table table-striped table-hover table-condensed table-responsive">
   <thead>
+  
+   <!--Load the AJAX API-->
+   
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+
+      google.load('visualization', '1.0', {'packages':['corechart']});
+
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() 
+      {
+        var data = new google.visualization.DataTable();
+        
+        {% for column in args.data[0] %}
+            {% if not loop.last %}
+                data.addColumn('number', '{{ column }}'); 
+            {%endif %}           
+        {% endfor %}
+        
+        {% for row in args.data[1] %}   
+            data.addRow( [ {{ row[0] }}, {{ row[1] }}, {{ row[2] }}, {{ row[3] }}, {{ row[4] }} ] );
+        {% endfor %}
+             
+        var options = {'title':'Testing',
+                       'width':1920,
+                       'height':1200};
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+    
     <tr>
     {% for column in args.data[0] %}
-    	{% if args.sort_index == loop.index0 %}
-    		{% if args.sortBool %}
-      			<th><a href="{{ args.id }}+{{ loop.index0 }}+false">{{ column }}</a></th>
-      		{% else %}
-      			<th><a href="{{ args.id }}+{{ loop.index0 }}+true">{{ column }}</a></th>
-      		{%endif %}
-      	{% else %}
-      		<th><a href="{{ args.id }}+{{ loop.index0 }}+false">{{ column }}</a></th>
+        {% if args.sort_index == loop.index0 %}
+            {% if args.sortBool %}
+                  <th><a href="{{ args.id }}+{{ loop.index0 }}+false">{{ column }}</a></th>
+              {% else %}
+                  <th><a href="{{ args.id }}+{{ loop.index0 }}+true">{{ column }}</a></th>
+              {%endif %}
+          {% else %}
+              <th><a href="{{ args.id }}+{{ loop.index0 }}+false">{{ column }}</a></th>
        {%endif %}
     {% endfor %}
     </tr>
   </thead>
 
-  <tbody> 	
+  <tbody>     
   {% for row in args.data[1] %}
     <tr>
     {% for data_item in row %}
       {% if loop.index0 == 0 and args.hasRef %}
-      	<td><a href="/show_author?author={{ data_item|replace(" ","+",5) }}">{{ data_item }}</a></td>
+          <td><a href="/show_author?author={{ data_item|replace(" ","+",5) }}">{{ data_item }}</a></td>
       {% else %}
-      	<td>{{ data_item }}</td>
+          <td>{{ data_item }}</td>
       {% endif %}
     {% endfor %}
     </tr>
   {% endfor %}
   </tbody>
 </table>
+
+<!--Div that will hold the pie chart-->
+    <div id="chart_div"></div>
+
 {% endblock %}
