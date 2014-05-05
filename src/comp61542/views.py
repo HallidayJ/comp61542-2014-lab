@@ -246,5 +246,5 @@ def showNetwork():
     args["author2"] = author2
     args["author1txt"] = author1txt
     args["author2txt"] = author2txt
-    
+     
     return render_template("network.html", args=args)

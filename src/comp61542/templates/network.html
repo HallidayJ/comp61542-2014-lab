@@ -29,14 +29,16 @@ Second Author:
 <ul>
   <li>Degree of Separation between {{ args.author1txt }} and {{ args.author2txt }} is {{ args.data[0] }}</li>
   
-  {% if args.data[0] != "X" and args.data[0] != "F" %}
+  {% if args.data[0] == "0"  %}
+  	{{ args.author1txt }} -> {{ args.author2txt }}
+  {% elif args.data[0] != "X" and args.data[0] != "F" %}
   	{% for author in args.path %}
   		{% if loop.last %}
 		  {{ author }} 
 		{% else %}
       	  {{ author }} ->
-        {%endif %}
-	{% endfor %}
+       {%endif %}
+	{% endfor %}	
   {% endif %}
   
   

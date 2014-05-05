@@ -500,7 +500,7 @@ class Database:
                 return ("F")
             
         return path
-
+    
     def get_author_publication_number(self, authorname):
         headers = "Publications"
         
