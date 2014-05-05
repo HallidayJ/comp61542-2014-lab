@@ -482,6 +482,24 @@ class Database:
                 return ("F")
             
         return ([len(path)-2])
+    
+    def separation_path(self,start,end):
+        
+        if start == "" or end == "":
+            return (-1)
+        
+        #path = self.BFS(start,end)
+        path = self.dijkstra(start, end)
+        
+        if len(path) == 1:
+            if start in path:
+                return ("0")
+            elif "X" in path:
+                return ("X")
+            elif "F" in path:
+                return ("F")
+            
+        return path
 
     def get_author_publication_number(self, authorname):
         headers = "Publications"

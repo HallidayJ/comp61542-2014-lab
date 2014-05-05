@@ -241,6 +241,7 @@ def showNetwork():
 
     args["authors"] = db.get_all_authors()
     args["data"] = db.degree_of_separation(author1txt, author2txt)
+    args["path"] = db.separation_path(author1txt, author2txt)
     args["author1"] = author1
     args["author2"] = author2
     args["author1txt"] = author1txt
