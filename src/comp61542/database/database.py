@@ -421,12 +421,23 @@ class Database:
             author_id = self.author_idx[author]
             data = self._get_collaborations_d(author_id, True)
             for edge in data:
-                G.add_edge(author_id,self.author_idx[edge])
+                G.add_edge(author_id,self.author_idx[edge],name=edge)
+                G.add
             
         p = nx.shortest_path_length(G)
         print p[self.author_idx["Simon Harper"]][self.author_idx["Amos Bairoch"]]
         print([p for p in nx.all_shortest_paths(G,self.author_idx["Simon Harper"],self.author_idx["Amos Bairoch"])])
-        nx.draw(G)
+        pos=nx.spring_layout(G) # positions for all nodes
+
+        # nodes
+        nx.draw_networkx_nodes(G,pos,node_size=700)
+        
+        # edges
+        nx.draw_networkx_edges(G,pos,width=6)
+        nx.draw_networkx_edges(G,pos,width=6,alpha=0.5,edge_color='b',style='dashed')
+        
+        # labels
+        nx.draw_networkx_labels(G,pos,font_size=20,font_family='sans-serif')
         
         #plt.axis('off')
         plt.savefig("weighted_graph.png") # save as png
