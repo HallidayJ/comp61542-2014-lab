@@ -188,7 +188,7 @@ def showAuthor():
     args["title"] = "Author Details for " + author
     
     args["data"] = (db.get_author_publications(author))
-        
+    args["coauthorDetails"] = (db.get_coauthor_details(author))
     args["author"] = author
     
     

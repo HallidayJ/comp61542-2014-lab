@@ -1,8 +1,26 @@
 {% extends "base.html" %}
-{% block title %}{{ args.title }}{% endblock %}
-{% block content %}
-<h3>{{ args.title }}</h3>
-<br/>
+{% block title %}{{ args.title }}{% endblock %} {% block content %} <h3>{{ args.title }}</h3> <br/>
+
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
+      google.load('visualization', '1', {packages:['orgchart']});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Name');
+        data.addColumn('string', 'Manager');
+        data.addColumn('string', 'ToolTip');
+
+        data.addRow( [ '{{ args.author }}' , '', '']);
+        
+        {% for cauthor in args.coauthorDetails %}    
+            data.addRow( [ '{{ cauthor[0] }}' ,'{{ args.author }}', '']);
+        {% endfor %}
+    
+        var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+        chart.draw(data, {allowHtml:true});
+      }
+    </script>
 
 {% for table in args.tables %}
 <h4>{{ table.title }}</h4>
@@ -27,8 +45,6 @@
 <br/>
 {% endfor %}
 
-
-
-
+<div id='chart_div'></div>
 
 {% endblock %}
